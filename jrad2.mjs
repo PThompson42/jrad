@@ -2846,15 +2846,32 @@ export class Pos2d extends Vector {
     static zoom = 1;
     static viewCenter = new Point(0, 0);
     static screenSize = new Point();
-    static displayFromPos(x, y) {}
+    static screenCenter = new Point();
+    static displayFromPos(pX, pY) {
+        let dX = (pX - Pos2d.viewCenter.x) / Pos2d.zoom + Pos2d.screenCenter.x;
+        let dY = (Pos2d.viewCenter.y - pY) / Pos2d.zoom + Pos2d.screenCenter.y;
+        return new Point(dX, dY);
+    }
+    static updateScreenSize(w, h) {
+        Pos2d.screenSize.x = w;
+        Pos2d.screenSize.y = h;
+        Pos2d.screenCenter.x = w / 2;
+        Pos2d.screenCenter.y = h / 2;
+    }
     static posFromDisplay(x, y) {}
     constructor(...args) {
         super(...args);
         if (this.rank !== 2) {
             alert(`Error!  Pos2d created with rank of ${this.rank}`);
         }
+        this.display = new Point();
     }
-    updateDisplay() {}
+    updateDisplay() {
+        this.display.x =
+            (this.x - Pos2d.viewCenter.x) / Pos2d.zoom + Pos2d.screenCenter.x;
+        this.display.y =
+            (Pos2d.viewCenter.y - this.y) / Pos2d.zoom + Pos2d.screenCenter.y;
+    }
 }
 
 //*------------------------16. TEXT Functions
